@@ -32,24 +32,31 @@ public class ProvaMQTTClientPaho {
 
 		while (true) {
 
-			IotMMSJsonMessage iMex = manager.generateMex();
-
-			Gson gson = new GsonBuilder().create();
-
-			System.out.println("Genereted message: " + gson.toJson(iMex));
-			Random r = new Random();
-			String topic = "";
-			if (r.nextBoolean())
-				topic = manager.generateTopic(HANA_CLOUD_NAME, DEVICE_ID);
-			else
-				topic = manager.generateTopic(HANA_CLOUD_NAME, DEVICE_ID1);
-
-			manager.sendMex(topic, iMex);
-
-			System.out.println("   ---> SENDED to topic: " + topic);
+			try {
+				IotMMSJsonMessage iMex = manager.generateMex();
 			
-			// ASPETTO 5 secondi
-			TimeUnit.SECONDS.sleep(300);
+
+				Gson gson = new GsonBuilder().create();
+
+				System.out.println("Genereted message: " + gson.toJson(iMex));
+				Random r = new Random();
+				String topic = "";
+				if (r.nextBoolean())
+					topic = manager.generateTopic(HANA_CLOUD_NAME, DEVICE_ID);
+				else
+					topic = manager.generateTopic(HANA_CLOUD_NAME, DEVICE_ID1);
+
+				manager.sendMex(topic, iMex);
+
+				System.out.println("   ---> SENDED to topic: " + topic);
+			
+				// ASPETTO 5 secondi
+				TimeUnit.SECONDS.sleep(300);
+			}
+			catch (MqttPersistenceException mpe) {}
+			catch (MqttException me) {}
+			catch (InterruptedException ie) {}
+			
 			
 			
 		}
